@@ -28,6 +28,13 @@ i{
     width: 100%;
 }
 
+.yellow_star{
+    color: yellow
+}
+
+.grey_star{
+    color: grey;
+ }
 /* Header */
 header{
     justify-content: space-between;
@@ -64,11 +71,20 @@ header > input{
 .details{
     position: absolute;
     background-color: #000;
-
     bottom: 0;
     left: 0;
     right: 0;
     top: 0;
+    flex-direction: column;
+    color: #fff;
+
+}
+.language{
+    align-items: center;
+}
+.language img{
+    height: 20px;
+    margin-left: 5px;
 }
 .card > img{
     width: 100%;
@@ -82,10 +98,10 @@ header > input{
     align-items: center;
     font-size: 50px;
 }
-.details{
-    flex-direction: column;
-    padding: 5px;
-}
-.card > .details{
-    color: #fff;
+
+.overview{
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
 }
