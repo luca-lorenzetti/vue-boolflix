@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
     <!-- My style -->
     <link rel="stylesheet" href="css/style.css">
    <!-- Axios lib -->
@@ -11,8 +15,35 @@
     <title>BoolFlix</title>
 </head>
 <body>
+    <div id="root">
+        <header class="flex">
+            <div class="left">
+                <h1>boolflix</h1> 
+            </div>
+            <div class="right flex">
+                <input type="text" v-model="input" name="searchBar" @keyup.enter="serachByTitle(input)">
+                <a href="#" >
+                    <i class="fas fa-search"></i>
+                </a>
+            </div>
+             </header>
 
-    <div id="root"></div>
+             <div class="content" v-show="filmsSearched.length > 0">
+                 <ul class="flex">
+                     <li v-for="(film,index) in filmsSearched">
+                         <div class="card" @mouseover="indexFilm = index" @mouseout=" indexFilm = null">
+                            <img v-show="film.poster_path" :src="'https://image.tmdb.org/t/p/w400/'+film.poster_path" alt="">
+                            <i v-show="!film.poster_path" class="fas fa-photo-video"></i>
+                            
+                            <div class="details flex" v-show="indexFilm == index">
+                               <p> <strong>Titolo: </strong> <small>{{film.title}}</small></p>
+                               <p> <strong>Titolo originale: </strong> <small>{{film.original_title}}</small></p>                           </div>
+                            </div>
+                        </div>
+                     </li>
+                 </ul>
+             </div>
+    </div>
  
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
