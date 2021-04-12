@@ -18,25 +18,29 @@
     <div id="root">
         <header class="flex">
             <div class="left">
-                <h1>boolflix</h1> 
+               <img src="https://fontmeme.com/permalink/210412/3d17423b6df1afaac5158d7cde49d926.png" alt="">
             </div>
             <div class="right flex">
-                <input type="text" v-model="input" name="searchBar" @keyup.enter="serachByTitle(input,true,true)">
-                <a href="#" >
-                    <i class="fas fa-search"></i>
-                </a>
+                    <i class="fas fa-search" @click="searchBar = !searchBar"></i>
+         
+                  <transition name="slide-fade">
+                    <input v-if="searchBar" type="text" v-model="input" placeholder="Cerca..." name="searchBar" @keyup.enter="serachByTitle(input,true,true)">
+                  </transition>
             </div>
              </header>
-             <div class="content" v-show="tvs.length > 0 || movies.length > 0">
+             <div class="content" v-show="filmsSearched.length > 0 || movies.length > 0">
                  <ul class="flex">
-                     <li v-for="(movie,indexMovie) in movies">
+                     <li v-for="(movie,indexMovie) in filmsSearched">
                          <div class="card" @mouseover="indexFilm = indexMovie" @mouseout="indexFilm = null">
-                            <img v-show="movie.poster_path" :src="'https://image.tmdb.org/t/p/w400/'+movie.poster_path" alt="">
+                            <img v-show="movie.poster_path && ( movie.media_type == 'tv' || movie.media_type == 'movie')" :src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path" alt="">
+                            <!-- <img v-show="movie.poster_path && movie.media_type == 'movie'" :src="'https://image.tmdb.org/t/p/w400/'+movie.poster_path" alt=""> -->
+                            <img v-show="movie.profile_path && movie.media_type == 'person'" :src="'https://image.tmdb.org/t/p/w500/'+movie.profile_path" alt="">
+
                             <i v-show="!movie.poster_path" class="fas fa-photo-video"></i>
 
                             <div class="details flex" v-show="indexFilm == indexMovie">
-                               <p> <strong>Titolo: </strong> <small>{{movie.title}}</small></p>
-                               <p> <strong>Titolo originale: </strong> <small>{{movie.original_title}}</small></p>                           
+                               <p> <strong>Titolo: </strong> <small>{{movie.title}}</small> <small>{{movie.name}}</small></p>
+                               <p> <strong>Titolo originale: </strong> <small>{{movie.original_title}}</small><small>{{movie.original_name}}</small></p>                           
                                <p class="language flex"> <strong>Language: </strong>{{movie.original_language}}
                                 
                                 <img v-show="movie.original_language" :src="'https://www.countryflags.io/'+movie.original_language+'/flat/64.png'"></p>                           
@@ -51,23 +55,6 @@
                             </div>
                         </div>
                      </li>
-                     <li v-for="(tv,indexTv) in tvs">
-                        <div class="card" @mouseover="indexFilm = indexTv" @mouseout=" indexFilm = null">
-                           <img v-show="tv.poster_path" :src="'https://image.tmdb.org/t/p/w400/'+tv.backdrop_path" alt="">
-                           <i v-show="!tv.poster_path" class="fas fa-photo-video"></i>
-                           
-                           <div class="details flex" v-show="indexFilm == indexTv">
-                              <p> <strong>Titolo: </strong> <small>{{tv.name}}</small></p>
-                              <p> <strong>Titolo originale: </strong> <small>{{tv.original_name}}</small></p> 
-                              <p class="language flex"> <strong>Language: </strong><img :src="'https://www.countryflags.io/'+tv.original_language+'/flat/64.png'"></p>                           
-                              <p> <strong>Voto: </strong> <span v-for="i in 5">
-                                <i v-show="(tv.vote_average/2) >= i || ( (tv.vote_average/2) -i) < -0.9" class="fas fa-star" :class="{'yellow_star' : (tv.vote_average/2) >= i, 'grey_star' : i > (tv.vote_average/2) }"></i>
-                                <i v-show="( (tv.vote_average/2) -i) > 0.3 && ( (tv.vote_average/2) -i) < 0.7" class="fas fa-star-half-alt yellow_star"></i>
-                                 </span></p>  
-                              <p> <strong>Overview: </strong> <small class="overview">{{tv.overview}}</small></p>                           
-                           </div>
-                       </div>
-                    </li>
                  </ul>
              </div>
     </div>

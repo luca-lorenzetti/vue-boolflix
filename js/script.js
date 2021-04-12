@@ -2,8 +2,10 @@ let app = new Vue({
     el: '#root',
     data:{
         input: '',
+        typeSearch: 'all',
         indexFilm: null,
         indexStar: null,
+        searchBar: false,
         filmsSearched: [],
         movies: [],
         tvs: []
@@ -13,18 +15,28 @@ let app = new Vue({
 
         serachByTitle(title,movie,tv){
 
-            if( movie ){
-                this.getMovies(title);
+            switch(this.typeSearch){
+                case 'all':
+                    this.setAllFilms(title);
             }
-
-            if( tv ){
-                this.getTvs(title);
-            }
-            this.filmsSearched = [...this.movies, ...this.tvs];
-           
         },
 
-        getMovies( title ){
+        setAllFilms( title){
+            axios.get('https://api.themoviedb.org/3/search/multi', {
+                params: {
+                    api_key: "feaf6db23feb7f3f96d8b38aa0e56ba0",
+                    query: title
+                }
+                })
+                .then( (response) => {
+                    this.filmsSearched = response.data.results;
+                    this.convertFlags(this.filmsSearched );
+                    console.log(this.filmsSearched )
+           
+                });
+        },
+
+        setMovies( title ){
             
             axios.get('https://api.themoviedb.org/3/search/movie', {
                 params: {
@@ -40,7 +52,7 @@ let app = new Vue({
                 });
                 
         },
-        getTvs( title ){
+        setTvs( title ){
 
             axios.get('https://api.themoviedb.org/3/search/tv', {
                 params: {

@@ -7,7 +7,7 @@
 /**********************/
 /* GENERAL */
 body{
-    background-color: grey;
+    background-color: #101;
     font-family: 'Lato', sans-serif;
 }
 ul{
@@ -47,12 +47,37 @@ h1{
     text-transform: uppercase;
     color: red;
 }
-header > input{
-    height: 30%;
-}
 
 .right{
     align-items: center;
+    justify-items: center;
+}
+header input{
+    background-color: #101;
+    height: 25px;
+    color: grey;
+    width: 200px;
+    border-radius: 12px;
+    outline: none;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+    transition: all .8s linear;
+    -webkit-transition: all .8s linear;
+    -moz-transition: all .8s linear;
+    -ms-transition: all .8s linear;
+    -o-transition: all .8s linear;
+}
+
+.slide-fade-enter, .slide-fade-leave-to{
+    transform: translateX(10px);
+    opacity: 0;
+    width: 0;
 }
 
 .content > ul{
