@@ -25,10 +25,10 @@ let app = new Vue({
             this.input = '';
 
             this.filmsFiltered = this.filmsSearched;
-            this.changeFilterFilms();
-            
 
-            this.setItemsPerPage();
+            this.changeFilterFilms();
+
+            this.setItemsPerPage(); // richiamo la funzione per settare l'impaginazione
         },
         pageIndex: function(){
        
@@ -96,11 +96,11 @@ let app = new Vue({
 
         },
 
+        // Funzione per settare gli items per ogni pagina
         setItemsPerPage(){
 
             this.pagesNumber = Math.floor(this.filmsFiltered.length / this.items_per_page);
             
-            console.log(this.pagesNumber)
             if( this.pageIndex*this.items_per_page <= this.filmsFiltered.length){
                 this.items_page = this.filmsFiltered.slice( (this.pageIndex*this.items_per_page), ( (this.pageIndex*this.items_per_page) + this.items_per_page ));
             }

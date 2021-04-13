@@ -21,7 +21,12 @@
     <div id="root">
         <header class="flex">
             <div class="left flex">
-                <a href="#"><img src="https://fontmeme.com/permalink/210412/3d17423b6df1afaac5158d7cde49d926.png" alt=""></a>
+                <div class="logo flex">
+                    <a href="#"><img src="https://fontmeme.com/permalink/210412/3d17423b6df1afaac5158d7cde49d926.png" alt=""></a>
+                </div>
+          
+            </div>
+            <div class="right flex">
                 <ul class="menu_filter flex">
                     <li :class="{'menu_filter_active' : typeSearch == 'all'}"><a @click="typeSearch = 'all'">All</a>
                     </li>
@@ -30,14 +35,11 @@
                     <li :class="{'menu_filter_active' : typeSearch == 'series'}"><a
                             @click="typeSearch = 'series'">Series</a></li>
                 </ul>
-            </div>
-            <div class="right flex">
-                <i class="fas fa-search flex" @click="searchBar = !searchBar"></i>
-
                 <transition name="slide-fade">
                     <input v-if="searchBar" type="text" v-model="input" placeholder="Cerca..." name="searchBar"
                         @keyup.enter="searchByTitle(input)">
                 </transition>
+                <i class="fas fa-search flex" @click="searchBar = !searchBar"></i>
             </div>
         </header>
 
@@ -60,6 +62,9 @@
 
                         <!-- Details -->
                         <div class="details flex" v-show="indexFilm == indexMovie">
+                            <p> <small v-show="movie.media_type == 'movie' || movie.media_type == 'tv'">{{movie.media_type == 'tv' ? "Series" : "Movie"}}</small>
+                                <small v-show="movie.media_type == 'person'"> Person</small>
+                            </p>
                             <p> <strong>Titolo: </strong> <small>{{movie.title || movie.name}}</small>
                             </p>
                             <p> <strong>Titolo originale: </strong>
