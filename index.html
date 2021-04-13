@@ -1,67 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- fontawesome -->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
     <!-- My style -->
     <link rel="stylesheet" href="css/style.css">
-   <!-- Axios lib -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <!-- Axios lib -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <title>BoolFlix</title>
 </head>
+
 <body>
     <div id="root">
         <header class="flex">
-            <div class="left">
-               <img src="https://fontmeme.com/permalink/210412/3d17423b6df1afaac5158d7cde49d926.png" alt="">
+            <div class="left flex">
+                <a href="#"><img src="https://fontmeme.com/permalink/210412/3d17423b6df1afaac5158d7cde49d926.png" alt=""></a>
+                <ul class="menu_filter flex">
+                    <li :class="{'menu_filter_active' : typeSearch == 'all'}"><a @click="typeSearch = 'all'">All</a>
+                    </li>
+                    <li :class="{'menu_filter_active' : typeSearch == 'movies'}"><a
+                            @click="typeSearch = 'movies'">Movies</a></li>
+                    <li :class="{'menu_filter_active' : typeSearch == 'series'}"><a
+                            @click="typeSearch = 'series'">Series</a></li>
+                </ul>
             </div>
             <div class="right flex">
-                    <i class="fas fa-search" @click="searchBar = !searchBar"></i>
-         
-                  <transition name="slide-fade">
-                    <input v-if="searchBar" type="text" v-model="input" placeholder="Cerca..." name="searchBar" @keyup.enter="serachByTitle(input,true,true)">
-                  </transition>
+                <i class="fas fa-search flex" @click="searchBar = !searchBar"></i>
+
+                <transition name="slide-fade">
+                    <input v-if="searchBar" type="text" v-model="input" placeholder="Cerca..." name="searchBar"
+                        @keyup.enter="searchByTitle(input)">
+                </transition>
             </div>
-             </header>
-             <div class="content" v-show="filmsSearched.length > 0 || movies.length > 0">
-                 <ul class="flex">
-                     <li v-for="(movie,indexMovie) in filmsSearched">
-                         <div class="card" @mouseover="indexFilm = indexMovie" @mouseout="indexFilm = null">
-                            <img v-show="movie.poster_path && ( movie.media_type == 'tv' || movie.media_type == 'movie')" :src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path" alt="">
-                            <!-- <img v-show="movie.poster_path && movie.media_type == 'movie'" :src="'https://image.tmdb.org/t/p/w400/'+movie.poster_path" alt=""> -->
-                            <img v-show="movie.profile_path && movie.media_type == 'person'" :src="'https://image.tmdb.org/t/p/w500/'+movie.profile_path" alt="">
+        </header>
 
-                            <i v-show="!movie.poster_path" class="fas fa-photo-video"></i>
+        <!-- Content -->
+        <div class="content" v-show="filmsFiltered.length > 0 ">
+            <ul class="flex">
+                <li v-for="(movie,indexMovie) in items_page">
 
-                            <div class="details flex" v-show="indexFilm == indexMovie">
-                               <p> <strong>Titolo: </strong> <small>{{movie.title}}</small> <small>{{movie.name}}</small></p>
-                               <p> <strong>Titolo originale: </strong> <small>{{movie.original_title}}</small><small>{{movie.original_name}}</small></p>                           
-                               <p class="language flex"> <strong>Language: </strong>{{movie.original_language}}
-                                
-                                <img v-show="movie.original_language" :src="'https://www.countryflags.io/'+movie.original_language+'/flat/64.png'"></p>                           
-                              
-                                <p> <strong>Voto:{{movie.vote_average/2}} </strong> <span v-for="i in 5">
-                                   <i v-show="(movie.vote_average/2) >= i || ( (movie.vote_average/2) -i) < -0.9" class="fas fa-star" :class="{'yellow_star' : (movie.vote_average/2) >= i, 'grey_star' : i > (movie.vote_average/2) }"></i>
-                                   <i v-show="( (movie.vote_average/2) -i) > 0.3 && ( (movie.vote_average/2) -i) < 0.7" class="fas fa-star-half-alt yellow_star"></i>
-    
-                                </span></p>    
-                              <p> <strong>Overview: </strong> <small class="overview">{{movie.overview}}</small></p>                           
+                    <!-- Card -->
+                    <div class="card flex" @mouseover="indexFilm = indexMovie" @mouseout="indexFilm = null">
+                        <!-- Locandina -->
+                        <img v-show="movie.poster_path && ( movie.media_type == 'tv' || movie.media_type == 'movie')"
+                            :src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path" alt="">
+                        <img v-show="movie.profile_path && movie.media_type == 'person'"
+                            :src="'https://image.tmdb.org/t/p/w500/'+movie.profile_path" alt="">
 
-                            </div>
+                        <h2 v-show="!movie.poster_path && !movie.profile_path " class="no_locandina">Locandina non
+                            disponibile</h2>
+                        <!-- /Locandina -->
+
+                        <!-- Details -->
+                        <div class="details flex" v-show="indexFilm == indexMovie">
+                            <p> <strong>Titolo: </strong> <small>{{movie.title || movie.name}}</small>
+                            </p>
+                            <p> <strong>Titolo originale: </strong>
+                                <small>{{movie.original_title || movie.original_name}}</small></p>
+                            <p class="language flex"> <strong>Language: </strong>
+
+                                <img v-show="movie.original_language"
+                                    :src="'https://www.countryflags.io/'+movie.original_language+'/flat/64.png'">
+                                <i v-show="!movie.original_language" class="fas fa-flag"></i>
+                            </p>
+
+                            <p> <strong>Voto:{{movie.vote_average/2}} </strong> <span v-for="i in 5">
+                                    <i class="fas fa-star"
+                                        :class="{'yellow_star' : i <= Math.round(movie.vote_average/2), 'grey_star' : i > Math.round(movie.vote_average/2) }"></i>
+
+                                </span></p>
+                            <p> <strong>Overview: </strong> <small class="overview">{{movie.overview}}</small></p>
+
                         </div>
-                     </li>
-                 </ul>
-             </div>
+                        <!-- Details -->
+
+                    </div>
+                    <!-- /Card -->
+
+                </li>
+            </ul>
+            <footer class="flex">
+                <ul >
+                    <li><a :class="{'page_active' : page-1 == pageIndex}" href="#" v-for="page in pagesNumber" @click="pageIndex = page-1">{{page}}</a></li>
+                </ul>
+            </footer>
+        </div>
+        <!-- /Content -->
+
+
     </div>
- 
+
     <!-- development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <!-- My Script -->
     <script src="js/script.js"></script>
 </body>
+
 </html>

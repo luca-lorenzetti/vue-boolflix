@@ -1,87 +1,114 @@
 let app = new Vue({
     el: '#root',
-    data:{
+    data: {
         input: '',
         typeSearch: 'all',
         indexFilm: null,
         indexStar: null,
         searchBar: false,
         filmsSearched: [],
-        movies: [],
-        tvs: []
+        filmsFiltered: [],
 
+        // Pagination
+        items_page: [],
+        items_per_page: 5,
+        pageIndex: 0,
+        pagesNumber: 0
     },
-    methods:{
-
-        serachByTitle(title,movie,tv){
-
-            switch(this.typeSearch){
-                case 'all':
-                    this.setAllFilms(title);
-            }
+    watch: {
+        // resta in ascolto al cambio di alcune variabili
+        typeSearch: function () {
+            this.changeFilterFilms();
         },
+        filmsSearched: function () {
+            this.pageIndex = 0;
+            this.input = '';
 
-        setAllFilms( title){
-            axios.get('https://api.themoviedb.org/3/search/multi', {
-                params: {
-                    api_key: "feaf6db23feb7f3f96d8b38aa0e56ba0",
-                    query: title
-                }
-                })
-                .then( (response) => {
-                    this.filmsSearched = response.data.results;
-                    this.convertFlags(this.filmsSearched );
-                    console.log(this.filmsSearched )
-           
-                });
-        },
-
-        setMovies( title ){
+            this.filmsFiltered = this.filmsSearched;
+            this.changeFilterFilms();
             
-            axios.get('https://api.themoviedb.org/3/search/movie', {
-                params: {
-                    api_key: "feaf6db23feb7f3f96d8b38aa0e56ba0",
-                    query: title
-                }
-                })
-                .then( (response) => {
-                    this.movies = response.data.results;
 
-                    this.convertFlags(this.movies);
-           
-                });
-                
+            this.setItemsPerPage();
         },
-        setTvs( title ){
+        pageIndex: function(){
+       
+            this.setItemsPerPage();
+        }
+    },
+    methods: {
+        // Ricerca per il titolo
+        searchByTitle(title) {
 
-            axios.get('https://api.themoviedb.org/3/search/tv', {
-                params: {
-                    api_key: "feaf6db23feb7f3f96d8b38aa0e56ba0",
-                    query: title
-                }
+            this.setAllFilms(title);
+            this.changeFilterFilms();
+
+        },
+        // Setta la ricerca sia per i film che per le serie
+        setAllFilms(title) {
+            axios.get('https://api.themoviedb.org/3/search/multi', {
+                    params: {
+                        api_key: "feaf6db23feb7f3f96d8b38aa0e56ba0",
+                        query: title
+                    }
                 })
-                .then( (response) => {
-                 this.tvs = response.data.results;
-                 this.convertFlags(this.tvs);
+                .then((response) => {
+                    this.filmsSearched = response.data.results;
+                    this.convertFlags(this.filmsSearched);
+                    console.log(this.filmsSearched)
 
                 });
         },
-        convertFlags(list){
-            list.forEach((item)=>{
-                switch(item.original_language){
+
+        // Filtra le pellicole da visualizzare
+        changeFilterFilms() {
+
+            switch (this.typeSearch) {
+                case 'movies':
+                    this.filmsFiltered = this.filmsSearched.filter((elem) => {
+                        return elem.media_type == "movie"
+                    });
+                    break;
+
+                case 'series':
+                    this.filmsFiltered = this.filmsSearched.filter((elem) => {
+                        return elem.media_type == "tv"
+                    });
+                    break;
+
+                default:
+                    this.filmsFiltered = this.filmsSearched;
+            }
+            this.pageIndex = 0;
+            this.setItemsPerPage();
+        },
+        // Conversione delle flags per risolvere il problema con alcune bandiere
+        convertFlags(list) {
+            list.forEach((item) => {
+                switch (item.original_language) {
                     case "en":
                         item.original_language = 'gb';
                         break;
                     case 'ja':
                         item.original_language = 'jp';
-                        break;    
+                        break;
                 }
             })
 
-        }  
+        },
+
+        setItemsPerPage(){
+
+            this.pagesNumber = Math.floor(this.filmsFiltered.length / this.items_per_page);
+            
+            console.log(this.pagesNumber)
+            if( this.pageIndex*this.items_per_page <= this.filmsFiltered.length){
+                this.items_page = this.filmsFiltered.slice( (this.pageIndex*this.items_per_page), ( (this.pageIndex*this.items_per_page) + this.items_per_page ));
+            }
+            else{
+                this.items_page = this.filmsFiltered.slice( (this.pageIndex*this.items_per_page), this.filmsFiltered.length-1);
+
+            }
+        }
     },
 
-    created(){
-
-    }
 });
