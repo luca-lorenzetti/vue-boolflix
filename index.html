@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="img/site.webmanifest">
+
     <!-- fontawesome -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
@@ -19,6 +25,61 @@
 
 <body>
     <div id="root">
+
+        <!-- Modal -->
+        <div v-show="showModal" class="modal flex" @click="showModal = false">
+            <div class="content_modal flex">
+                <div class="left_modal">
+                    <img class="locandina" v-show="movieModal.poster_path && ( movieModal.media_type == 'tv' || movieModal.media_type == 'movie')"
+                        :src="'https://image.tmdb.org/t/p/w500/'+movieModal.poster_path" alt="">
+                    <img class="locandina" v-show="movieModal.profile_path && movieModal.media_type == 'person'"
+                        :src="'https://image.tmdb.org/t/p/w500/'+movieModal.profile_path" alt="">
+        
+                    <div v-show="!movieModal.poster_path && !movieModal.profile_path " class="no_locandina_modal flex">
+                        <h2  class=" no_locandina flex">Locandina non
+                            disponibile</h2>
+                    </div>
+            
+                </div>
+
+                <div class="right_modal">
+                    <p> <strong>{{ movieModal.media_type != 'person' ?'Titolo: ' : 'Name: '}} </strong> <small>{{movieModal.title || movieModal.name}}</small>
+                    </p>
+                    <p v-show="movieModal.media_type == 'person'"><strong>Professione: </strong><small>{{movieModal.known_for_department}}</small></p>
+                    <p v-show="movieModal.media_type != 'person'"> <strong>Titolo originale: </strong>
+                        <small>{{movieModal.original_title || movieModal.original_name}}</small></p>
+               
+                    <div class="films_person"><strong>Films: </strong>
+                        <ul>
+                            <li  v-for="movieM in movieModal.known_for"> <small> {{movieM.title}}</small></li>
+                        </ul>
+                    </div>    
+                    <p v-show="movieModal.media_type != 'person'" class="language flex"> <strong>Language: {{movieModal.language}}</strong>
+
+                        <img v-show="movieModal.original_language"
+                            :src="'https://www.countryflags.io/'+movieModal.original_language+'/flat/64.png'">
+                        <i v-show="!movieModal.original_language" class="fas fa-flag"></i>
+                    </p>
+                    <p v-show="movieModal.media_type != 'person'"> <strong>Voto:{{movieModal.vote_average/2}} </strong> <span v-for="i in 5">
+                        <i class="fas fa-star"
+                            :class="{'yellow_star' : i <= Math.round(movieModal.vote_average/2), 'grey_star' : i > Math.round(movieModal.vote_average/2) }"></i></span>
+                </p>
+                <p v-show="movieModal.media_type != 'person'" class="overview_modal"> <strong>Overview: </strong> <small>{{movieModal.overview}}</small></p>
+                </div>
+
+                </div>
+            
+        </div>
+
+
+
+     
+        <!-- /Modal -->
+
+
+
+
+        <!-- Header -->
         <header class="flex">
             <div class="left flex">
                 <div class="logo flex">
@@ -42,18 +103,19 @@
                 <i class="fas fa-search flex" @click="searchBar = !searchBar"></i>
             </div>
         </header>
-
+        <!-- /Header -->
+        
         <!-- Content -->
         <div class="content" v-show="filmsFiltered.length > 0 ">
             <ul class="flex">
                 <li v-for="(movie,indexMovie) in items_page">
 
                     <!-- Card -->
-                    <div class="card flex" @mouseover="indexFilm = indexMovie" @mouseout="indexFilm = null">
+                    <div class="card flex" @mouseover="indexFilm = indexMovie" @mouseout="indexFilm = null" >
                         <!-- Locandina -->
-                        <img v-show="movie.poster_path && ( movie.media_type == 'tv' || movie.media_type == 'movie')"
+                        <img class="locandina" v-show="movie.poster_path && ( movie.media_type == 'tv' || movie.media_type == 'movie')"
                             :src="'https://image.tmdb.org/t/p/w500/'+movie.poster_path" alt="">
-                        <img v-show="movie.profile_path && movie.media_type == 'person'"
+                        <img class="locandina" v-show="movie.profile_path && movie.media_type == 'person'"
                             :src="'https://image.tmdb.org/t/p/w500/'+movie.profile_path" alt="">
 
                         <h2 v-show="!movie.poster_path && !movie.profile_path " class="no_locandina">Locandina non
@@ -61,27 +123,30 @@
                         <!-- /Locandina -->
 
                         <!-- Details -->
-                        <div class="details flex" v-show="indexFilm == indexMovie">
+                        <div class="details flex" v-show="indexFilm == indexMovie" @click="showModal = true, movieModal = movie">
                             <p> <small v-show="movie.media_type == 'movie' || movie.media_type == 'tv'">{{movie.media_type == 'tv' ? "Series" : "Movie"}}</small>
                                 <small v-show="movie.media_type == 'person'"> Person</small>
                             </p>
-                            <p> <strong>Titolo: </strong> <small>{{movie.title || movie.name}}</small>
+                             <p v-show="movie.media_type == 'person'"><strong>Professione: </strong> <small>{{movie.known_for_department}}</small> </strong></p>
+
+                            <!-- Titles -->
+                            <p> <strong>{{ movie.media_type != 'person' ?'Titolo: ' : 'Name: '}} </strong> <small>{{movie.title || movie.name}}</small>
                             </p>
-                            <p> <strong>Titolo originale: </strong>
+                            <p v-show="movie.media_type != 'person'"> <strong>Titolo originale: </strong>
                                 <small>{{movie.original_title || movie.original_name}}</small></p>
-                            <p class="language flex"> <strong>Language: </strong>
+                            <!-- Titles -->    
+                            <p v-show="movie.media_type != 'person'" class="language flex"> <strong>Language: {{movie.language}}</strong>
 
                                 <img v-show="movie.original_language"
                                     :src="'https://www.countryflags.io/'+movie.original_language+'/flat/64.png'">
                                 <i v-show="!movie.original_language" class="fas fa-flag"></i>
                             </p>
 
-                            <p> <strong>Voto:{{movie.vote_average/2}} </strong> <span v-for="i in 5">
+                            <p v-show="movie.media_type != 'person'"> <strong>Voto:{{movie.vote_average/2}} </strong> <span v-for="i in 5">
                                     <i class="fas fa-star"
-                                        :class="{'yellow_star' : i <= Math.round(movie.vote_average/2), 'grey_star' : i > Math.round(movie.vote_average/2) }"></i>
-
-                                </span></p>
-                            <p> <strong>Overview: </strong> <small class="overview">{{movie.overview}}</small></p>
+                                        :class="{'yellow_star' : i <= Math.round(movie.vote_average/2), 'grey_star' : i > Math.round(movie.vote_average/2) }"></i></span>
+                            </p>
+                            <p v-show="movie.media_type != 'person'"> <strong>Overview: </strong> <small class="overview">{{movie.overview}}</small></p>
 
                         </div>
                         <!-- Details -->
@@ -92,8 +157,8 @@
                 </li>
             </ul>
             <footer class="flex">
-                <ul >
-                    <li><a :class="{'page_active' : page-1 == pageIndex}" href="#" v-for="page in pagesNumber" @click="pageIndex = page-1">{{page}}</a></li>
+                <ul v-show="pagesNumber > 1">
+                    <li><a  :class="{'page_active' : page-1 == pageIndex}" href="#" v-for="page in pagesNumber" @click="pageIndex = page-1">{{page}}</a></li>
                 </ul>
             </footer>
         </div>

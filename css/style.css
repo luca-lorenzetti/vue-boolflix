@@ -7,7 +7,7 @@
 /**********************/
 /* GENERAL */
 body{
-    background-color: #101;
+    background-color: #000;
     font-family: 'Lato', sans-serif;
 }
 ul{
@@ -36,13 +36,13 @@ i{
 .grey_star{
     color: grey;
  }
+
 /* Header */
+
 header{
-    /* justify-content: space-between; */
     flex-direction: column;
-    /* align-items: center; */
     background-color: #000;
-    height: 400px;
+    height: 60vh;
     padding: 0 40px;
     background-image: url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?blur=10");
     background-size: cover;
@@ -50,16 +50,43 @@ header{
     background-position: center 70%;
     flex-wrap: wrap;
 }
+
 header::after{
     content: '';
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(26, 26, 26, 0.5);
     bottom: 0;
     left: 0;
     right: 0;
     top: 0;
+    box-shadow: 1px 4px 4px rgba(100, 100, 100, 0.3);
 }
 
+header input{
+    background-color: rgba(0, 0, 0,0.6);
+    padding: 10px;
+    height: 45px;
+    color: #e50914;
+    width: 250px;
+    border-radius: 8px;
+    font-size: 25px;
+    outline: none;
+    border: 1px solid #fff;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+}
+
+header i{
+    align-items: center;
+    margin-top: 4px;
+    margin-left: 5px;
+    height: 45px;
+    font-size: 30px;
+}
+
+/* Left */
 .left{
     align-items: flex-start;
     position: relative;
@@ -69,6 +96,7 @@ header::after{
 }
 
 .logo{
+    margin-top: 30px;
     flex-direction: column;
     justify-content: flex-start;
 }
@@ -77,6 +105,7 @@ h1{
     color: red;
 }
 
+/* Menu filter */
 .menu_filter{
     color: #fff;
     margin-left: 10px;
@@ -98,27 +127,7 @@ h1{
     position: relative;
     z-index: 10;
 }
-header input{
-    background-color: rgba(17, 0, 17,0.6);
-    padding: 10px;
-    height: 45px;
-    color: darkred;
-    width: 250px;
-    border-radius: 12px;
-    font-size: 25px;
-    outline: none;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    -ms-border-radius: 12px;
-    -o-border-radius: 12px;
-}
-header i{
-    align-items: center;
-    margin-top: 4px;
-    margin-left: 5px;
-    height: 45px;
-    font-size: 30px;
-}
+
 .slide-fade-enter-active,
 .slide-fade-leave-active {
     transition: all .3s linear;
@@ -134,11 +143,14 @@ header i{
     width: 0;
 }
 
+/* Content */
 .content > ul{
+    padding: 100px;
     flex-wrap: wrap;
     justify-content: center;
 }
 
+/* Card */
 .card{
     align-items: center;
     color: #fff;
@@ -147,7 +159,22 @@ header i{
     height: 450px;
     margin: 30px;
     border: 2px solid rgb(184, 184, 184);
-    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 12px 6px rgba(83, 83, 83, 0.5);
+
+}
+
+.locandina{
+    width: 100%;
+    height: 100%;
+}
+
+.card > i{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
 }
 
 .no_locandina{
@@ -155,6 +182,7 @@ header i{
     width: 100%;
 }
 
+/* Details */
 .details{
     position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
@@ -165,10 +193,13 @@ header i{
     flex-direction: column;
     color: #fff;
     padding: 20px;
+    cursor: pointer;
 }
 .details p {
     margin: 5px
 }
+
+/* Language */
 .language{
     align-items: center;
 }
@@ -177,18 +208,7 @@ header i{
     margin-left: 5px;
 }
 
-.card > img{
-    width: 100%;
-    height: 100%;
-}
-.card > i{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
-}
+
 
 .overview{
     display: -webkit-box;
@@ -200,6 +220,7 @@ header i{
 /* Footer */
 
 footer{
+    /* margin-top: 100px; */
     position: relative;
     z-index: 10;
     justify-content: center;
@@ -207,14 +228,69 @@ footer{
 }
 
 footer a {
-    color: darkred;
-    border: 1px solid darkred;
+    color: #e50914;
+    border: 1px solid #e50914;
     text-decoration: none;
     font-size: 30px;
-    padding: 10px 15px;
+    padding: 5px 10px;
     margin: 0 5px;
 }
 .page_active{
     color: #000;
-    background-color: darkred;
+    background-color: #e50914;
+}
+
+/* Modal */
+
+.modal{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: flex-start;
+}
+.content_modal{
+    background-color: #000;
+    height: 60vh;
+    width: 60vw;
+    margin-top: 20vh;
+    box-shadow: 1px 4px 4px rgba(100, 100, 100, 0.3);
+}
+
+.left_modal{
+    flex: 2;
+}
+.left_modal .locandina{
+    height: 100%;
+}
+
+.right_modal{
+    font-size: 20px;
+    flex: 4;
+    color: white;
+    padding: 20px;
+}
+.right_modal > p{
+   margin: 10px
+}
+.right_modal > p > small{
+    margin-top: 5px;
+    display: block;
+ }
+.films_person, .films_person > ul {
+    margin: 10px;
+}
+.films_person > ul > li{
+    margin: 5px;
+}
+.no_locandina_modal{
+    padding: 20px;
+    color: #fff;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    border: 1px solid grey;
 }

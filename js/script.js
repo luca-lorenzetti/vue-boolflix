@@ -9,6 +9,10 @@ let app = new Vue({
         filmsSearched: [],
         filmsFiltered: [],
 
+        //Modal
+        showModal: false,
+        movieModal: {},
+
         // Pagination
         items_page: [],
         items_per_page: 5,
@@ -91,6 +95,10 @@ let app = new Vue({
                     case 'ja':
                         item.original_language = 'jp';
                         break;
+
+                    case 'el':
+                        item.original_language = 'gr';
+                        break;    
                 }
             })
 
@@ -108,7 +116,8 @@ let app = new Vue({
                 this.items_page = this.filmsFiltered.slice( (this.pageIndex*this.items_per_page), this.filmsFiltered.length-1);
 
             }
-        }
+        },
+    
     },
 
 });
