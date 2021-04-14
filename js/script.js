@@ -34,8 +34,8 @@ let app = new Vue({
 
             this.setItemsPerPage(); // richiamo la funzione per settare l'impaginazione
         },
-        pageIndex: function(){
-       
+        pageIndex: function () {
+
             this.setItemsPerPage();
         }
     },
@@ -98,26 +98,25 @@ let app = new Vue({
 
                     case 'el':
                         item.original_language = 'gr';
-                        break;    
+                        break;
                 }
             })
 
         },
 
         // Funzione per settare gli items per ogni pagina
-        setItemsPerPage(){
+        setItemsPerPage() {
 
             this.pagesNumber = Math.floor(this.filmsFiltered.length / this.items_per_page);
-            
-            if( this.pageIndex*this.items_per_page <= this.filmsFiltered.length){
-                this.items_page = this.filmsFiltered.slice( (this.pageIndex*this.items_per_page), ( (this.pageIndex*this.items_per_page) + this.items_per_page ));
-            }
-            else{
-                this.items_page = this.filmsFiltered.slice( (this.pageIndex*this.items_per_page), this.filmsFiltered.length-1);
+
+            if (this.pageIndex * this.items_per_page <= this.filmsFiltered.length) {
+                this.items_page = this.filmsFiltered.slice((this.pageIndex * this.items_per_page), ((this.pageIndex * this.items_per_page) + this.items_per_page));
+            } else {
+                this.items_page = this.filmsFiltered.slice((this.pageIndex * this.items_per_page), this.filmsFiltered.length - 1);
 
             }
         },
-    
+
     },
 
 });
