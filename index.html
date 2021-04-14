@@ -58,7 +58,7 @@
                         <small>{{movieModal.original_title || movieModal.original_name}}</small></p>
                     <!-- /Title modal -->
 
-                    <div class="films_person"><strong>Films: </strong>
+                    <div v-show="movieModal.type_media == 'person'" class="films_person"><strong>Films: </strong>
                         <ul>
                             <li v-for="movieM in movieModal.known_for"> <small> {{movieM.title}}</small></li>
                         </ul>
