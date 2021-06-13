@@ -40,6 +40,12 @@ let app = new Vue({
         }
     },
     methods: {
+
+        resetSearch(){
+            this.typeSearch = 'all';
+            this.filmsSearched = [];
+            this.filmsFiltered = [];
+        },
         // Ricerca per il titolo
         searchByTitle(title) {
 

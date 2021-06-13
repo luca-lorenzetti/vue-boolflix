@@ -27,68 +27,70 @@
     <div id="root">
 
         <!-- Modal -->
-        <div v-show="showModal" class="modal flex" @click="showModal = false">
-            <div class="content_modal flex">
-                <!-- Left Modal -->
-                <div class="left_modal">
-                    <img class="locandina"
-                        v-show="movieModal.poster_path && ( movieModal.media_type == 'tv' || movieModal.media_type == 'movie')"
-                        :src="'https://image.tmdb.org/t/p/w500/'+movieModal.poster_path" alt="">
-                    <img class="locandina" v-show="movieModal.profile_path && movieModal.media_type == 'person'"
-                        :src="'https://image.tmdb.org/t/p/w500/'+movieModal.profile_path" alt="">
+        <transition name="slide-fade">
+            <div v-show="showModal" class="modal flex" @click="showModal = false">
+                <div class="content_modal flex">
+                    <!-- Left Modal -->
+                    <div class="left_modal">
+                        <img class="locandina"
+                            v-show="movieModal.poster_path && ( movieModal.media_type == 'tv' || movieModal.media_type == 'movie')"
+                            :src="'https://image.tmdb.org/t/p/w500/'+movieModal.poster_path" alt="">
+                        <img class="locandina" v-show="movieModal.profile_path && movieModal.media_type == 'person'"
+                            :src="'https://image.tmdb.org/t/p/w500/'+movieModal.profile_path" alt="">
 
-                    <div v-show="!movieModal.poster_path && !movieModal.profile_path " class="no_locandina_modal flex">
-                        <h2 class=" no_locandina flex">Locandina non
-                            disponibile</h2>
+                        <div v-show="!movieModal.poster_path && !movieModal.profile_path " class="no_locandina_modal flex">
+                            <h2 class=" no_locandina flex">Locandina non
+                                disponibile</h2>
+                        </div>
+
                     </div>
+                    <!-- /Left Modal -->
 
-                </div>
-                <!-- /Left Modal -->
+                    <!-- Right modal -->
+                    <div class="right_modal">
 
-                <!-- Right modal -->
-                <div class="right_modal">
+                        <!-- Title modal -->
+                        <p> <strong>{{ movieModal.media_type != 'person' ?'Titolo: ' : 'Name: '}} </strong>
+                            <small>{{movieModal.title || movieModal.name}}</small>
+                        </p>
+                        <p v-show="movieModal.media_type == 'person'"><strong>Professione:
+                            </strong><small>{{movieModal.known_for_department}}</small></p>
+                        <p v-show="movieModal.media_type != 'person'"> <strong>Titolo originale: </strong>
+                            <small>{{movieModal.original_title || movieModal.original_name}}</small></p>
+                        <!-- /Title modal -->
 
-                    <!-- Title modal -->
-                    <p> <strong>{{ movieModal.media_type != 'person' ?'Titolo: ' : 'Name: '}} </strong>
-                        <small>{{movieModal.title || movieModal.name}}</small>
-                    </p>
-                    <p v-show="movieModal.media_type == 'person'"><strong>Professione:
-                        </strong><small>{{movieModal.known_for_department}}</small></p>
-                    <p v-show="movieModal.media_type != 'person'"> <strong>Titolo originale: </strong>
-                        <small>{{movieModal.original_title || movieModal.original_name}}</small></p>
-                    <!-- /Title modal -->
+                        <div v-show="movieModal.type_media == 'person'" class="films_person"><strong>Films: </strong>
+                            <ul>
+                                <li v-for="movieM in movieModal.known_for"> <small> {{movieM.title}}</small></li>
+                            </ul>
+                        </div>
+                        <p v-show="movieModal.media_type != 'person'" class="language flex"> <strong>Language:
+                                {{movieModal.language}}</strong>
 
-                    <div v-show="movieModal.type_media == 'person'" class="films_person"><strong>Films: </strong>
-                        <ul>
-                            <li v-for="movieM in movieModal.known_for"> <small> {{movieM.title}}</small></li>
-                        </ul>
+                            <img v-show="movieModal.original_language"
+                                :src="'https://www.countryflags.io/'+movieModal.original_language+'/flat/64.png'">
+                            <i v-show="!movieModal.original_language" class="fas fa-flag"></i>
+                        </p>
+                        <p v-show="movieModal.media_type != 'person'"> <strong>Voto:{{movieModal.vote_average/2}} </strong>
+                            <span v-for="i in 5">
+                                <i class="fas fa-star"
+                                    :class="{'yellow_star' : i <= Math.round(movieModal.vote_average/2), 'grey_star' : i > Math.round(movieModal.vote_average/2) }"></i></span>
+                        </p>
+                        <p v-show="movieModal.media_type != 'person'" class="overview_modal"> <strong>Overview: </strong>
+                            <small>{{movieModal.overview}}</small></p>
                     </div>
-                    <p v-show="movieModal.media_type != 'person'" class="language flex"> <strong>Language:
-                            {{movieModal.language}}</strong>
-
-                        <img v-show="movieModal.original_language"
-                            :src="'https://www.countryflags.io/'+movieModal.original_language+'/flat/64.png'">
-                        <i v-show="!movieModal.original_language" class="fas fa-flag"></i>
-                    </p>
-                    <p v-show="movieModal.media_type != 'person'"> <strong>Voto:{{movieModal.vote_average/2}} </strong>
-                        <span v-for="i in 5">
-                            <i class="fas fa-star"
-                                :class="{'yellow_star' : i <= Math.round(movieModal.vote_average/2), 'grey_star' : i > Math.round(movieModal.vote_average/2) }"></i></span>
-                    </p>
-                    <p v-show="movieModal.media_type != 'person'" class="overview_modal"> <strong>Overview: </strong>
-                        <small>{{movieModal.overview}}</small></p>
+                    <!-- Right modal -->
                 </div>
-                <!-- Right modal -->
-            </div>
         </div>
+    </transition>
         <!-- /Modal -->
 
         <!-- Header -->
         <header class="flex">
             <div class="left flex">
                 <div class="logo flex">
-                    <a href="#"><img src="https://fontmeme.com/permalink/210412/3d17423b6df1afaac5158d7cde49d926.png"
-                            alt=""></a>
+                    <a @click="resetSearch()"><img src="https://fontmeme.com/permalink/210412/3d17423b6df1afaac5158d7cde49d926.png"
+                            alt="boolFlix-logo"></a>
                 </div>
 
             </div>
@@ -136,7 +138,7 @@
                                 <small v-show="movie.media_type == 'person'"> Person</small>
                             </p>
                             <p v-show="movie.media_type == 'person'"><strong>Professione: </strong>
-                                <small>{{movie.known_for_department}}</small> </strong></p>
+                                <small>{{movie.known_for_department}}</small> </p>
 
                             <!-- Titles -->
                             <p> <strong>{{ movie.media_type != 'person' ?'Titolo: ' : 'Name: '}} </strong>
@@ -170,8 +172,8 @@
                 </li>
             </ul>
             <footer class="flex">
-                <ul v-show="pagesNumber > 1">
-                    <li><a :class="{'page_active' : page-1 == pageIndex}" href="#" v-for="page in pagesNumber"
+                <ul id="pagination" v-show="pagesNumber > 1">
+                    <li><a :class="{'page_active' : page-1 == pageIndex}" href="#pagination" v-for="page in pagesNumber"
                             @click="pageIndex = page-1">{{page}}</a></li>
                 </ul>
             </footer>

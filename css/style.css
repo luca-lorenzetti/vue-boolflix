@@ -102,6 +102,9 @@ header i {
     flex-direction: column;
     justify-content: flex-start;
 }
+.logo:hover{
+  cursor: pointer;
+}
 
 h1 {
     text-transform: uppercase;
@@ -254,8 +257,9 @@ footer a {
 
 .modal {
     width: 100%;
-    height: 100%;
+    height: 125%;
     position: absolute;
+    top: 25%;
     z-index: 100;
     background-color: rgba(0, 0, 0, 0.7);
     justify-content: center;
