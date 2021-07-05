@@ -2,12 +2,22 @@ let app = new Vue({
     el: '#root',
     data: {
         input: '',
+        lastInput: '',
         typeSearch: 'all',
         indexFilm: null,
         indexStar: null,
         searchBar: false,
         filmsSearched: [],
         filmsFiltered: [],
+        languages:[
+            'it',
+            'gb',
+            'fr',
+            'es',
+            'de'
+        ],
+        language: '',
+        show_languages: false,
 
         //Modal
         showModal: false,
@@ -26,6 +36,9 @@ let app = new Vue({
         },
         filmsSearched: function () {
             this.pageIndex = 0;
+            if(this.input){
+                this.lastInput = this.input;
+            }
             this.input = '';
 
             this.filmsFiltered = this.filmsSearched;
@@ -39,8 +52,21 @@ let app = new Vue({
             this.setItemsPerPage();
         }
     },
+
+    mounted(){
+        this.language = this.languages[0];
+    },
     methods: {
 
+        setLanguages(lang){
+            this.language = lang;
+            this.show_languages = false;
+
+            this.searchByTitle(this.lastInput);
+        },
+        changeLanguage(){
+            this.show_languages = !this.show_languages;
+        },
         resetSearch(){
             this.typeSearch = 'all';
             this.filmsSearched = [];
@@ -48,16 +74,26 @@ let app = new Vue({
         },
         // Ricerca per il titolo
         searchByTitle(title) {
-
+     
             this.setAllFilms(title);
             this.changeFilterFilms();
-
         },
         // Setta la ricerca sia per i film che per le serie
         setAllFilms(title) {
+
+            let lang = '';
+            switch(this.language){
+                case 'gb':
+                    lang = 'en';
+                    break;
+                default:
+                    lang = this.language;    
+            }
+
             axios.get('https://api.themoviedb.org/3/search/multi', {
                     params: {
                         api_key: "feaf6db23feb7f3f96d8b38aa0e56ba0",
+                        language: lang,
                         query: title
                     }
                 })
