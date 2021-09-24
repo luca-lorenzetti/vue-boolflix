@@ -21,6 +21,10 @@ i {
     color: #fff;
 }
 
+a:hover {
+    cursor: pointer;
+}
+
 /* UTILITIES */
 
 .flex {
@@ -99,33 +103,37 @@ header i {
     padding: 20px;
 }
 
-.languages{
+#languages {
     height: 40px;
     width: 40px;
 }
 
-.languages ul{
+#languages ul {
     display: none;
 }
-.show_languages{
+
+.show_languages {
     display: block !important;
 }
 
-.languages img{
+#languages img {
     padding: 5px;
     width: 100%;
     height: 100%;
 }
-.languages img:hover{
-   background-color: rgb(46, 46, 46);
-   cursor: pointer;
+
+#languages img:hover {
+    background-color: rgb(46, 46, 46);
+    cursor: pointer;
 }
+
 .logo {
     margin-top: 30px;
     /* flex-direction: column; */
 }
-.logo:hover{
-  cursor: pointer;
+
+.logo:hover {
+    cursor: pointer;
 }
 
 h1 {
@@ -156,14 +164,17 @@ h1 {
     position: relative;
     z-index: 10;
 }
-.right > input{
-	animation-name: blink_cursor;
-	animation-duration: 800ms;
-	animation-iteration-count: infinite;
+
+.right>input {
+    animation-name: blink_cursor;
+    animation-duration: 800ms;
+    animation-iteration-count: infinite;
 }
-.right > input i{
+
+.right>input i {
     display: none;
 }
+
 .slide-fade-enter-active,
 .slide-fade-leave-active {
     transition: all .3s linear;
@@ -187,12 +198,19 @@ h1 {
     justify-content: center;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
     transition: opacity .5s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+    {
     opacity: 0;
-  }
+}
+
 /* Card */
 .card {
     align-items: center;
@@ -243,12 +261,19 @@ h1 {
     margin: 5px
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
     transition: opacity .5s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+    {
     opacity: 0;
-  }
+}
+
 /* Language */
 .language {
     align-items: center;
@@ -293,7 +318,9 @@ footer a {
     background-color: #e50914;
 }
 
-
+.fa-search:hover{
+    cursor: pointer;
+}
 /* Modal */
 
 .modal {
@@ -346,16 +373,20 @@ footer a {
     margin-top: 5px;
     display: block;
 }
-#title_modal{
-   justify-content: space-between; 
+
+#title_modal {
+    justify-content: space-between;
 }
-#close_modal{
+
+#close_modal {
     font-size: 26px;
 }
-#close_modal:hover{
+
+#close_modal:hover {
     cursor: pointer;
     color: lightgrey;
 }
+
 .films_person,
 .films_person>ul {
     margin: 10px;
@@ -374,3 +405,4 @@ footer a {
     align-items: center;
     border: 1px solid grey;
 }
+

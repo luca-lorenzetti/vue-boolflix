@@ -9,7 +9,7 @@ let app = new Vue({
         searchBar: false,
         filmsSearched: [],
         filmsFiltered: [],
-        languages:[
+        languages: [
             'it',
             'gb',
             'fr',
@@ -36,7 +36,7 @@ let app = new Vue({
         },
         filmsSearched: function () {
             this.pageIndex = 0;
-            if(this.input){
+            if (this.input) {
                 this.lastInput = this.input;
             }
             this.input = '';
@@ -53,28 +53,34 @@ let app = new Vue({
         }
     },
 
-    mounted(){
+    created(){
+
+    },
+
+    mounted() {
         this.language = this.languages[0];
     },
     methods: {
 
-        setLanguages(lang){
+        setLanguages(lang) {
+            
             this.language = lang;
             this.show_languages = false;
 
             this.searchByTitle(this.lastInput);
         },
-        changeLanguage(){
+        changeLanguage() {
             this.show_languages = !this.show_languages;
         },
-        resetSearch(){
+        // Resetta la ricerca
+        resetSearch() {
             this.typeSearch = 'all';
             this.filmsSearched = [];
             this.filmsFiltered = [];
         },
         // Ricerca per il titolo
         searchByTitle(title) {
-     
+
             this.setAllFilms(title);
             this.changeFilterFilms();
         },
@@ -82,12 +88,12 @@ let app = new Vue({
         setAllFilms(title) {
 
             let lang = '';
-            switch(this.language){
+            switch (this.language) {
                 case 'gb':
                     lang = 'en';
                     break;
                 default:
-                    lang = this.language;    
+                    lang = this.language;
             }
 
             axios.get('https://api.themoviedb.org/3/search/multi', {
